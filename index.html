@@ -6,7 +6,7 @@
 <title>VOLLer's Onboarding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,6 +30,7 @@
     --radius: 12px;
     --radius-sm: 8px;
     --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.12);
   }
 
   body {
@@ -40,6 +41,69 @@
     line-height: 1.6;
     min-height: 100vh;
   }
+
+  /* ── WELCOME OVERLAY ── */
+  .welcome-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #1A1A18 0%, #2D2D2A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.4s ease;
+  }
+  .welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
+  .welcome-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 2.5rem 2.5rem 2rem;
+    max-width: 420px;
+    width: calc(100% - 2rem);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .welcome-logo { height: 30px; margin-bottom: 1.5rem; }
+  .welcome-card h1 { font-size: 21px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .welcome-card > p { font-size: 14px; color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.65; }
+  .welcome-input-wrap { display: flex; gap: 10px; }
+  .welcome-input {
+    flex: 1;
+    padding: 11px 16px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .welcome-input:focus { border-color: var(--orange); }
+  .welcome-btn {
+    padding: 11px 20px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .welcome-btn:hover { background: var(--orange-dark); }
+  .welcome-btn:active { transform: scale(0.97); }
+  .welcome-hint { margin-top: 1rem; font-size: 12px; color: var(--text-subtle); }
 
   /* ── HEADER ── */
   .site-header {
@@ -55,6 +119,8 @@
     z-index: 100;
   }
   .site-header img { height: 28px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-name { font-size: 13px; color: var(--text-muted); font-weight: 500; display: none; }
   .header-badge {
     font-size: 12px;
     font-weight: 600;
@@ -80,6 +146,17 @@
     gap: 20px;
     align-items: flex-start;
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(232,72,26,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
   }
   .hero-icon {
     width: 48px; height: 48px;
@@ -89,8 +166,9 @@
     flex-shrink: 0;
   }
   .hero-icon i { font-size: 22px; color: var(--orange); }
-  .hero-text h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .hero-text h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .hero-text p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+  .name-highlight { color: var(--orange); }
 
   /* ── SECTION LABEL ── */
   .section-label {
@@ -100,6 +178,34 @@
     text-transform: uppercase;
     color: var(--text-subtle);
     margin-bottom: 12px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--green-dark));
+    border-radius: 5px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-weight: 500;
+    white-space: nowrap;
   }
 
   /* ── MODULE TABS ── */
@@ -115,11 +221,25 @@
     border-radius: var(--radius);
     padding: 14px 12px;
     cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
     text-align: left;
+    position: relative;
   }
-  .mod-tab:hover { border-color: var(--border-mid); box-shadow: var(--shadow); }
+  .mod-tab:hover { border-color: var(--border-mid); box-shadow: var(--shadow); transform: translateY(-1px); }
   .mod-tab.active { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,72,26,0.08); }
+  .mod-tab.visited:not(.active) { border-color: rgba(29,158,117,0.35); }
+  .visited-dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 16px; height: 16px;
+    background: var(--green);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .mod-tab.visited .visited-dot { display: flex; }
+  .visited-dot i { font-size: 10px; color: #fff; }
   .mod-tab .tab-icon {
     width: 32px; height: 32px;
     border-radius: var(--radius-sm);
@@ -138,10 +258,13 @@
     padding: 1.75rem 2rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow);
-    animation: fadeIn 0.2s ease;
+    animation: fadeSlide 0.22s ease;
   }
   .mod-content.visible { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .mod-content-header {
     display: flex; align-items: center; gap: 10px;
     margin-bottom: 1.25rem;
@@ -171,6 +294,33 @@
   }
   .info-note i { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
 
+  /* ── MODULE NAVIGATION ── */
+  .mod-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .mod-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: var(--radius-sm);
+    background: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .mod-nav-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+  .mod-nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+
   /* ── CHAT ── */
   .chat-wrap {
     background: var(--surface);
@@ -181,7 +331,7 @@
     box-shadow: var(--shadow);
   }
   .chat-head {
-    background: var(--orange);
+    background: linear-gradient(90deg, var(--orange) 0%, #F25830 100%);
     padding: 14px 18px;
     display: flex; align-items: center; gap: 12px;
   }
@@ -192,14 +342,23 @@
     display: flex; align-items: center; justify-content: center;
   }
   .chat-avatar i { font-size: 18px; color: #fff; }
+  .chat-head-info { flex: 1; }
   .chat-head-info span { font-size: 14px; font-weight: 600; color: #fff; display: block; }
   .chat-head-info small { font-size: 12px; color: rgba(255,255,255,0.75); }
+  .online-dot {
+    width: 8px; height: 8px;
+    background: #4ADE80;
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.45} }
   .chat-messages {
     padding: 16px;
     display: flex; flex-direction: column; gap: 12px;
-    min-height: 200px; max-height: 340px;
+    min-height: 200px; max-height: 360px;
     overflow-y: auto;
     background: var(--bg);
+    scroll-behavior: smooth;
   }
   .msg { max-width: 84%; }
   .msg-name { font-size: 11px; color: var(--text-subtle); margin-bottom: 3px; padding-left: 2px; }
@@ -208,6 +367,7 @@
     border-radius: 16px;
     font-size: 14px;
     line-height: 1.6;
+    word-break: break-word;
   }
   .msg.bot .msg-bubble {
     background: var(--surface);
@@ -239,7 +399,6 @@
   .typing span:nth-child(2) { animation-delay: 0.2s; }
   .typing span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
-
   .chat-suggestions {
     display: flex; flex-wrap: wrap; gap: 6px;
     padding: 10px 16px 12px;
@@ -255,9 +414,9 @@
     cursor: pointer;
     background: var(--surface);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
-  .chip:hover { border-color: var(--orange); color: var(--orange); }
+  .chip:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
   .chat-input-row {
     padding: 12px 16px;
     border-top: 1px solid var(--border);
@@ -285,10 +444,11 @@
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: background 0.15s;
+    transition: background 0.15s, transform 0.1s, opacity 0.15s;
   }
   .send-btn i { font-size: 16px; color: #fff; }
   .send-btn:hover { background: var(--orange-dark); }
+  .send-btn:active { transform: scale(0.9); }
 
   /* ── QUIZ ── */
   .quiz-wrap {
@@ -298,8 +458,10 @@
     padding: 1.75rem 2rem;
     box-shadow: var(--shadow);
   }
-  .quiz-wrap h2 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-  .quiz-wrap .quiz-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .quiz-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .quiz-head i { font-size: 22px; color: var(--orange); }
+  .quiz-wrap h2 { font-size: 17px; font-weight: 600; }
+  .quiz-wrap .quiz-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; margin-top: 4px; }
   .question { margin-bottom: 1.5rem; }
   .question p { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
   .option {
@@ -311,16 +473,26 @@
     cursor: pointer;
     font-size: 14px;
     color: var(--text-muted);
-    transition: background 0.1s, border-color 0.1s;
+    transition: background 0.1s, border-color 0.1s, transform 0.1s;
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: none;
     text-align: left;
     width: 100%;
   }
-  .option:hover { background: var(--bg); border-color: var(--border-mid); }
+  .option:hover { background: var(--bg); border-color: var(--border-mid); transform: translateX(2px); }
   .option.correct { background: #EAF3DE; border-color: #639922; color: #3B6D11; }
   .option.wrong { background: #FCEBEB; border-color: #A32D2D; color: #A32D2D; }
   .option i { font-size: 16px; flex-shrink: 0; }
+  .quiz-explanation {
+    font-size: 12.5px;
+    padding: 8px 12px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    margin-top: -7px;
+    margin-bottom: 7px;
+    display: none;
+  }
+  .quiz-explanation.correct { background: #EAF3DE; color: #3B6D11; border: 1.5px solid #639922; border-top: none; }
+  .quiz-explanation.wrong { background: #FCEBEB; color: #A32D2D; border: 1.5px solid #A32D2D; border-top: none; }
   .quiz-submit {
     background: var(--orange);
     color: #fff;
@@ -331,13 +503,21 @@
     font-weight: 600;
     cursor: pointer;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: background 0.15s;
+    transition: background 0.15s, transform 0.1s;
     margin-top: 0.5rem;
   }
   .quiz-submit:hover { background: var(--orange-dark); }
-  .quiz-result { display: none; text-align: center; padding: 2rem 1rem; }
-  .quiz-result i { font-size: 48px; color: var(--orange); display: block; margin-bottom: 12px; }
-  .quiz-result h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .quiz-submit:active { transform: scale(0.97); }
+  .quiz-result { display: none; text-align: center; padding: 2rem 1rem; animation: fadeSlide 0.3s ease; }
+  .result-icon {
+    width: 72px; height: 72px;
+    background: var(--orange-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .result-icon i { font-size: 38px; color: var(--orange); }
+  .quiz-result h3 { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
   .quiz-result p { font-size: 14px; color: var(--text-muted); }
 
   /* ── FOOTER ── */
@@ -353,15 +533,35 @@
   @media (max-width: 600px) {
     .container { padding: 1.5rem 1rem 3rem; }
     .hero { padding: 1.5rem; }
-    .mod-content { padding: 1.25rem 1.25rem; }
+    .mod-content { padding: 1.25rem; }
+    .quiz-wrap { padding: 1.25rem; }
+    .welcome-input-wrap { flex-direction: column; }
+    .welcome-btn { width: 100%; justify-content: center; }
   }
 </style>
 </head>
 <body>
 
+<!-- BOAS-VINDAS -->
+<div id="welcome-overlay" class="welcome-overlay">
+  <div class="welcome-card">
+    <img src="data:image/jpeg;base64,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" alt="VOLL" class="welcome-logo" />
+    <h1>Bem-vindo ao Onboarding VOLLer's!</h1>
+    <p>Ficamos felizes em ter você aqui. Antes de começar, como você se chama?</p>
+    <div class="welcome-input-wrap">
+      <input type="text" id="name-input" class="welcome-input" placeholder="Seu nome..." maxlength="40" autocomplete="given-name" />
+      <button class="welcome-btn" onclick="startOnboarding()">Começar <i class="ti ti-arrow-right"></i></button>
+    </div>
+    <p class="welcome-hint">Seu nome vai personalizar o seu onboarding</p>
+  </div>
+</div>
+
 <header class="site-header">
   <img src="data:image/jpeg;base64,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" alt="VOLL" />
-  <span class="header-badge">Onboarding</span>
+  <div class="header-right">
+    <span class="header-name" id="header-name"></span>
+    <span class="header-badge">Onboarding</span>
+  </div>
 </header>
 
 <main class="container">
@@ -369,34 +569,47 @@
   <div class="hero">
     <div class="hero-icon"><i class="ti ti-confetti"></i></div>
     <div class="hero-text">
-      <h1>Olá, novo VOLLer! Seja bem-vindo.</h1>
+      <h1>Olá, <span class="name-highlight" id="hero-name">novo VOLLer</span>! Seja bem-vindo.</h1>
       <p>Este portal vai te guiar pelos módulos da plataforma VOLL. Explore os tópicos, tire dúvidas com a Vollie — nossa assistente de IA — e complete o quiz de homologação ao final.</p>
     </div>
   </div>
 
   <p class="section-label">Módulos de aprendizado</p>
+
+  <div class="progress-row">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-label" id="progress-label">0 / 5 módulos</span>
+  </div>
+
   <div class="modules-grid">
-    <div class="mod-tab active" onclick="showModule('viagens', this)">
+    <div class="mod-tab active" onclick="showModule('viagens', this)" data-module="viagens">
+      <div class="visited-dot"><i class="ti ti-check"></i></div>
       <div class="tab-icon" style="background:#E1F5EE"><i class="ti ti-plane" style="font-size:17px;color:#0F6E56"></i></div>
       <h3>Viagens</h3>
       <p>Passagens, voos e locação</p>
     </div>
-    <div class="mod-tab" onclick="showModule('hotel', this)">
+    <div class="mod-tab" onclick="showModule('hotel', this)" data-module="hotel">
+      <div class="visited-dot"><i class="ti ti-check"></i></div>
       <div class="tab-icon" style="background:#E6F1FB"><i class="ti ti-building" style="font-size:17px;color:#185FA5"></i></div>
       <h3>Hotel</h3>
       <p>Menor preço garantido</p>
     </div>
-    <div class="mod-tab" onclick="showModule('mobilidade', this)">
+    <div class="mod-tab" onclick="showModule('mobilidade', this)" data-module="mobilidade">
+      <div class="visited-dot"><i class="ti ti-check"></i></div>
       <div class="tab-icon" style="background:#FAEEDA"><i class="ti ti-car" style="font-size:17px;color:#854F0B"></i></div>
       <h3>Mobilidade</h3>
       <p>Uber, 99 e transporte</p>
     </div>
-    <div class="mod-tab" onclick="showModule('wallet', this)">
+    <div class="mod-tab" onclick="showModule('wallet', this)" data-module="wallet">
+      <div class="visited-dot"><i class="ti ti-check"></i></div>
       <div class="tab-icon" style="background:#FDF1EC"><i class="ti ti-wallet" style="font-size:17px;color:#C03A12"></i></div>
       <h3>VOLL Wallet</h3>
       <p>Pagamentos e cartão</p>
     </div>
-    <div class="mod-tab" onclick="showModule('smarthub', this)">
+    <div class="mod-tab" onclick="showModule('smarthub', this)" data-module="smarthub">
+      <div class="visited-dot"><i class="ti ti-check"></i></div>
       <div class="tab-icon" style="background:#EEEDFE"><i class="ti ti-robot" style="font-size:17px;color:#534AB7"></i></div>
       <h3>Smart Hub</h3>
       <p>Agentes de IA 24/7</p>
@@ -425,6 +638,10 @@
       <i class="ti ti-info-circle"></i>
       <span>Limites específicos por cargo ficam visíveis no menu <strong>Minha Política</strong> dentro do app VOLL.</span>
     </div>
+    <div class="mod-nav">
+      <button class="mod-nav-btn" disabled><i class="ti ti-arrow-left"></i> Anterior</button>
+      <button class="mod-nav-btn" onclick="navigateModule(1)">Próximo <i class="ti ti-arrow-right"></i></button>
+    </div>
   </div>
 
   <!-- HOTEL -->
@@ -444,6 +661,10 @@
     <div class="info-item">
       <i class="ti ti-credit-card"></i>
       <p><strong>Sem desembolso no check-in:</strong> A reserva é centralizada e faturada diretamente para a corporação. Você não precisa pagar nada na recepção pelas diárias padrão.</p>
+    </div>
+    <div class="mod-nav">
+      <button class="mod-nav-btn" onclick="navigateModule(-1)"><i class="ti ti-arrow-left"></i> Anterior</button>
+      <button class="mod-nav-btn" onclick="navigateModule(1)">Próximo <i class="ti ti-arrow-right"></i></button>
     </div>
   </div>
 
@@ -469,6 +690,10 @@
       <i class="ti ti-info-circle"></i>
       <span>Todas as corridas feitas pelo app são faturadas automaticamente para a empresa. <strong>Não é necessário guardar recibos.</strong></span>
     </div>
+    <div class="mod-nav">
+      <button class="mod-nav-btn" onclick="navigateModule(-1)"><i class="ti ti-arrow-left"></i> Anterior</button>
+      <button class="mod-nav-btn" onclick="navigateModule(1)">Próximo <i class="ti ti-arrow-right"></i></button>
+    </div>
   </div>
 
   <!-- WALLET -->
@@ -493,6 +718,10 @@
       <i class="ti ti-camera"></i>
       <p><strong>Fim das notinhas físicas:</strong> Fotografe o comprovante pelo app. A tecnologia OCR+ extrai CNPJ, data, valor e itens automaticamente, realizando a pré-conciliação da despesa na hora.</p>
     </div>
+    <div class="mod-nav">
+      <button class="mod-nav-btn" onclick="navigateModule(-1)"><i class="ti ti-arrow-left"></i> Anterior</button>
+      <button class="mod-nav-btn" onclick="navigateModule(1)">Próximo <i class="ti ti-arrow-right"></i></button>
+    </div>
   </div>
 
   <!-- SMART HUB -->
@@ -514,6 +743,10 @@
       <i class="ti ti-info-circle"></i>
       <span>Se receber uma mensagem do ExpenseAudit, responda ao chat para regularizar. Não ignore — é o agente de IA atuando para manter sua conformidade.</span>
     </div>
+    <div class="mod-nav">
+      <button class="mod-nav-btn" onclick="navigateModule(-1)"><i class="ti ti-arrow-left"></i> Anterior</button>
+      <button class="mod-nav-btn" disabled>Próximo <i class="ti ti-arrow-right"></i></button>
+    </div>
   </div>
 
   <!-- CHAT -->
@@ -525,11 +758,12 @@
         <span>Vollie</span>
         <small>Assistente de onboarding VOLL · online</small>
       </div>
+      <div class="online-dot"></div>
     </div>
     <div class="chat-messages" id="chat-messages">
       <div class="msg bot">
         <div class="msg-name">Vollie</div>
-        <div class="msg-bubble">Olá! Sou a Vollie, sua assistente de onboarding da VOLL 👋 Pode me perguntar qualquer coisa sobre a plataforma — viagens, hotéis, mobilidade, VOLL Wallet ou Smart Hub. Estou aqui para te ajudar a começar com o pé direito!</div>
+        <div class="msg-bubble" id="vollie-welcome">Olá! Sou a Vollie, sua assistente de onboarding da VOLL 👋 Pode me perguntar qualquer coisa sobre a plataforma — viagens, hotéis, mobilidade, VOLL Wallet ou Smart Hub. Estou aqui para te ajudar a começar com o pé direito!</div>
       </div>
     </div>
     <div class="chat-suggestions" id="chat-suggestions">
@@ -547,29 +781,32 @@
   <!-- QUIZ -->
   <p class="section-label">Quiz de homologação</p>
   <div class="quiz-wrap">
-    <h2>Teste seus conhecimentos</h2>
+    <div class="quiz-head">
+      <i class="ti ti-certificate"></i>
+      <h2>Teste seus conhecimentos</h2>
+    </div>
     <p class="quiz-desc">Responda as perguntas para ser homologado no uso da plataforma VOLL.</p>
     <div id="quiz-body">
       <div class="question" id="q1">
         <p>1. O que você deve fazer com os recibos em papel após finalizar uma corrida de Uber/99 pelo app da VOLL?</p>
-        <button class="option" onclick="answer(this, false, 'q1')"><i class="ti ti-circle"></i> Escanear e guardar na gaveta por 5 anos</button>
-        <button class="option" onclick="answer(this, true, 'q1')"><i class="ti ti-circle"></i> Nada — todas as despesas são faturadas digitalmente para a empresa</button>
+        <button class="option" onclick="answer(this,false,'q1','Incorreto. Pelo app VOLL todas as despesas são faturadas digitalmente — não há necessidade de guardar recibos.')"><i class="ti ti-circle"></i> Escanear e guardar na gaveta por 5 anos</button>
+        <button class="option" onclick="answer(this,true,'q1','Correto! Todas as corridas feitas pelo app VOLL são faturadas automaticamente para a empresa.')"><i class="ti ti-circle"></i> Nada — todas as despesas são faturadas digitalmente para a empresa</button>
       </div>
       <div class="question" id="q2">
         <p>2. Se o ExpenseAudit identificar um gasto atípico nas suas despesas, o que acontece?</p>
-        <button class="option" onclick="answer(this, true, 'q2')"><i class="ti ti-circle"></i> O agente inicia um chat automático comigo pedindo esclarecimentos</button>
-        <button class="option" onclick="answer(this, false, 'q2')"><i class="ti ti-circle"></i> Minha conta é bloqueada imediatamente sem chance de justificativa</button>
+        <button class="option" onclick="answer(this,true,'q2','Correto! O ExpenseAudit abre um chat automático para que você possa esclarecer a situação.')"><i class="ti ti-circle"></i> O agente inicia um chat automático comigo pedindo esclarecimentos</button>
+        <button class="option" onclick="answer(this,false,'q2','Incorreto. O agente sempre abre um chat primeiro para você justificar — nunca bloqueia sem aviso.')"><i class="ti ti-circle"></i> Minha conta é bloqueada imediatamente sem chance de justificativa</button>
       </div>
       <div class="question" id="q3">
         <p>3. Onde encontro os limites de diárias e gastos específicos para o meu cargo?</p>
-        <button class="option" onclick="answer(this, false, 'q3')"><i class="ti ti-circle"></i> Preciso perguntar ao RH a cada viagem</button>
-        <button class="option" onclick="answer(this, true, 'q3')"><i class="ti ti-circle"></i> No menu "Minha Política" dentro do próprio app VOLL</button>
+        <button class="option" onclick="answer(this,false,'q3','Incorreto. Você não precisa perguntar ao RH — as políticas já estão disponíveis no próprio app.')"><i class="ti ti-circle"></i> Preciso perguntar ao RH a cada viagem</button>
+        <button class="option" onclick="answer(this,true,'q3','Correto! Todas as políticas e limites ficam visíveis em &quot;Minha Política&quot; dentro do app VOLL.')"><i class="ti ti-circle"></i> No menu "Minha Política" dentro do próprio app VOLL</button>
       </div>
       <button class="quiz-submit" onclick="submitQuiz()">Verificar respostas</button>
     </div>
     <div class="quiz-result" id="quiz-result">
-      <i class="ti ti-rosette-discount-check"></i>
-      <h3>Parabéns! Você está homologado.</h3>
+      <div class="result-icon"><i class="ti ti-rosette-discount-check"></i></div>
+      <h3>Parabéns<span id="quiz-name-span"></span>! Você está homologado.</h3>
       <p>Você demonstrou conhecimento suficiente para usar a plataforma VOLL com autonomia e total conformidade.</p>
     </div>
   </div>
@@ -581,6 +818,76 @@
 </footer>
 
 <script>
+// ── WELCOME & NAME ──
+const MODULE_ORDER = ['viagens', 'hotel', 'mobilidade', 'wallet', 'smarthub'];
+let currentIdx = 0;
+const visitedSet = new Set();
+
+function applyName(name) {
+  const first = name.split(' ')[0];
+  document.getElementById('hero-name').textContent = first;
+  const hn = document.getElementById('header-name');
+  hn.textContent = 'Olá, ' + first;
+  hn.style.display = 'block';
+  document.getElementById('quiz-name-span').textContent = ', ' + first;
+  const wm = document.getElementById('vollie-welcome');
+  if (wm) wm.textContent = `Olá, ${first}! Sou a Vollie, sua assistente de onboarding da VOLL 👋 Pode me perguntar qualquer coisa sobre a plataforma — viagens, hotéis, mobilidade, VOLL Wallet ou Smart Hub. Estou aqui para te ajudar a começar com o pé direito!`;
+}
+
+function startOnboarding() {
+  const input = document.getElementById('name-input');
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+  localStorage.setItem('voller_name', name);
+  applyName(name);
+  const overlay = document.getElementById('welcome-overlay');
+  overlay.classList.add('fade-out');
+  setTimeout(() => { overlay.style.display = 'none'; }, 420);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('voller_name');
+  if (saved) {
+    applyName(saved);
+    document.getElementById('welcome-overlay').style.display = 'none';
+  }
+  document.getElementById('name-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startOnboarding();
+  });
+  visitedSet.add('viagens');
+  document.querySelector('[data-module="viagens"]').classList.add('visited');
+  updateProgress();
+});
+
+// ── MODULES ──
+function showModule(id, card) {
+  document.querySelectorAll('.mod-content').forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('.mod-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('content-' + id).classList.add('visible');
+  card.classList.add('active');
+  card.classList.add('visited');
+  currentIdx = MODULE_ORDER.indexOf(id);
+  visitedSet.add(id);
+  updateProgress();
+}
+
+function navigateModule(dir) {
+  const newIdx = currentIdx + dir;
+  if (newIdx < 0 || newIdx >= MODULE_ORDER.length) return;
+  const id = MODULE_ORDER[newIdx];
+  const card = document.querySelector('[data-module="' + id + '"]');
+  showModule(id, card);
+  document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateProgress() {
+  const count = visitedSet.size;
+  const pct = (count / MODULE_ORDER.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = count + ' / ' + MODULE_ORDER.length + ' módulos';
+}
+
+// ── CHAT ──
 const SYSTEM_PROMPT = `Você é a Vollie, assistente oficial de onboarding da VOLL. Responda em português do Brasil com tom profissional e acolhedor. Seja concisa e objetiva. Foque exclusivamente no ecossistema VOLL.
 
 CONHECIMENTO OFICIAL VOLL:
@@ -601,6 +908,7 @@ const chatEl = document.getElementById('chat-messages');
 const inputEl = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 let busy = false;
+const chatHistory = [];
 
 function addMsg(text, isUser) {
   const wrap = document.createElement('div');
@@ -622,17 +930,21 @@ function addMsg(text, isUser) {
 function showTyping() {
   const wrap = document.createElement('div');
   wrap.className = 'msg bot';
-  wrap.id = 'typing';
+  wrap.id = 'typing-indicator';
+  const n = document.createElement('div');
+  n.className = 'msg-name';
+  n.textContent = 'Vollie';
   const t = document.createElement('div');
   t.className = 'typing';
   t.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(n);
   wrap.appendChild(t);
   chatEl.appendChild(wrap);
   chatEl.scrollTop = chatEl.scrollHeight;
 }
 
 function hideTyping() {
-  const el = document.getElementById('typing');
+  const el = document.getElementById('typing-indicator');
   if (el) el.remove();
 }
 
@@ -643,7 +955,9 @@ async function sendMessage() {
   document.getElementById('chat-suggestions').style.display = 'none';
   addMsg(text, true);
   busy = true;
+  sendBtn.style.opacity = '0.5';
   showTyping();
+  chatHistory.push({ role: 'user', content: text });
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -652,18 +966,21 @@ async function sendMessage() {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
         system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: text }]
+        messages: chatHistory
       })
     });
     const data = await res.json();
     hideTyping();
     const reply = data.content?.[0]?.text || 'Desculpe, não consegui responder agora. Tente novamente.';
     addMsg(reply, false);
+    chatHistory.push({ role: 'assistant', content: reply });
   } catch(e) {
     hideTyping();
     addMsg('Houve um problema de conexão. Por favor, tente novamente.', false);
+    chatHistory.pop();
   }
   busy = false;
+  sendBtn.style.opacity = '1';
 }
 
 function sendSuggestion(text) {
@@ -674,39 +991,39 @@ function sendSuggestion(text) {
 inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 sendBtn.addEventListener('click', sendMessage);
 
-function showModule(id, card) {
-  document.querySelectorAll('.mod-content').forEach(el => el.classList.remove('visible'));
-  document.querySelectorAll('.mod-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('content-' + id).classList.add('visible');
-  card.classList.add('active');
-}
+// ── QUIZ ──
+const quizAnswers = {};
 
-const answers = {};
-function answer(el, correct, qId) {
-  if (answers[qId] !== undefined) return;
-  answers[qId] = correct;
+function answer(el, correct, qId, explanation) {
+  if (quizAnswers[qId] !== undefined) return;
+  quizAnswers[qId] = correct;
   el.parentElement.querySelectorAll('.option').forEach(o => { o.style.pointerEvents = 'none'; });
   el.classList.add(correct ? 'correct' : 'wrong');
   el.querySelector('i').className = correct ? 'ti ti-check' : 'ti ti-x';
+  const exp = document.createElement('div');
+  exp.className = 'quiz-explanation ' + (correct ? 'correct' : 'wrong');
+  exp.textContent = explanation;
+  el.insertAdjacentElement('afterend', exp);
 }
 
 function submitQuiz() {
-  if (Object.keys(answers).length < 3) {
+  if (Object.keys(quizAnswers).length < 3) {
     alert('Por favor, responda todas as perguntas antes de verificar.');
     return;
   }
-  const score = Object.values(answers).filter(Boolean).length;
+  const score = Object.values(quizAnswers).filter(Boolean).length;
   if (score === 3) {
     document.getElementById('quiz-body').style.display = 'none';
     document.getElementById('quiz-result').style.display = 'block';
   } else {
     alert('Você acertou ' + score + ' de 3. Revise os módulos e tente novamente!');
-    Object.keys(answers).forEach(k => delete answers[k]);
+    Object.keys(quizAnswers).forEach(k => delete quizAnswers[k]);
     document.querySelectorAll('.option').forEach(o => {
       o.classList.remove('correct', 'wrong');
       o.querySelector('i').className = 'ti ti-circle';
       o.style.pointerEvents = '';
     });
+    document.querySelectorAll('.quiz-explanation').forEach(e => e.remove());
   }
 }
 </script>
