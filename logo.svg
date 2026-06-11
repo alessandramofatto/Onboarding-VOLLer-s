@@ -1,8 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 52" width="148" height="52">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 52" width="160" height="52">
   <defs>
     <style>
-      .v { font-family: 'Arial Rounded MT Bold', 'Nunito', 'Plus Jakarta Sans', Arial, sans-serif; font-weight: 900; font-size: 46px; fill: #C8430A; letter-spacing: -1px; }
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@900&amp;display=swap');
+      .t {
+        font-family: 'Nunito', 'Arial Rounded MT Bold', 'Trebuchet MS', Arial, sans-serif;
+        font-weight: 900;
+        font-size: 46px;
+        fill: #E8481A;
+        letter-spacing: -1.5px;
+      }
     </style>
   </defs>
-  <text class="v" x="4" y="44">VOLL</text>
+  <text class="t" x="2" y="44">VOLL</text>
 </svg>
