@@ -103,23 +103,27 @@
   }
   .welcome-input::placeholder { color: var(--text-subtle); }
   .welcome-input:focus { border-color: var(--orange); }
+  /* DS Filled / Medium (40px) */
   .welcome-btn {
-    padding: 11px 20px;
+    height: 40px;
+    padding: 0 20px;
     background: var(--orange);
     color: #fff;
     border: none;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.01em;
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
   }
-  .welcome-btn:hover { background: var(--orange-dark); }
+  .welcome-btn:hover { background: var(--orange-dark); box-shadow: 0 2px 8px rgba(242,111,33,0.30); }
   .welcome-btn:active { transform: scale(0.97); }
   .welcome-hint { margin-top: 1rem; font-size: 12px; color: var(--text-subtle); }
 
@@ -242,7 +246,7 @@
     position: relative;
   }
   .mod-tab:hover { border-color: var(--border-mid); box-shadow: var(--shadow); transform: translateY(-1px); }
-  .mod-tab.active { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,72,26,0.08); }
+  .mod-tab.active { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(242,111,33,0.10); }
   .mod-tab.visited:not(.active) { border-color: rgba(29,107,78,0.35); }
   .visited-dot {
     position: absolute;
@@ -319,23 +323,26 @@
     padding-top: 1rem;
     border-top: 1px solid var(--border);
   }
+  /* DS Ghost / Small (32px) */
   .mod-nav-btn {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
-    border: 1.5px solid var(--border-mid);
+    height: 32px;
+    padding: 0 14px;
+    border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
     background: none;
     font-size: 13px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text);
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
+    white-space: nowrap;
   }
   .mod-nav-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
-  .mod-nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+  .mod-nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 
   /* ── CHAT ── */
   .chat-wrap {
@@ -421,16 +428,21 @@
     background: var(--surface);
     border-top: 1px solid var(--border);
   }
+  /* DS Outline / Small — suggestion chips */
   .chip {
-    padding: 5px 13px;
-    border: 1px solid var(--border-mid);
+    height: 30px;
+    padding: 0 13px;
+    border: 1.5px solid var(--border);
     border-radius: 20px;
     font-size: 12px;
+    font-weight: 500;
     color: var(--text-muted);
     cursor: pointer;
     background: var(--surface);
     font-family: 'Inter', sans-serif;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
+    display: inline-flex;
+    align-items: center;
   }
   .chip:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
   .chat-input-row {
@@ -452,18 +464,19 @@
     transition: border-color 0.15s;
   }
   .chat-input-row input:focus { border-color: var(--orange); }
+  /* DS Filled / circular send */
   .send-btn {
-    width: 38px; height: 38px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     background: var(--orange);
     border: none;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: background 0.15s, transform 0.1s, opacity 0.15s;
+    transition: background 0.15s, transform 0.1s, opacity 0.15s, box-shadow 0.15s;
   }
-  .send-btn i { font-size: 16px; color: #fff; }
-  .send-btn:hover { background: var(--orange-dark); }
+  .send-btn i { font-size: 17px; color: #fff; }
+  .send-btn:hover { background: var(--orange-dark); box-shadow: 0 2px 8px rgba(242,111,33,0.30); }
   .send-btn:active { transform: scale(0.9); }
 
   /* ── QUIZ ── */
@@ -509,20 +522,23 @@
   }
   .quiz-explanation.correct { background: #EAF3DE; color: #3B6D11; border: 1.5px solid #639922; border-top: none; }
   .quiz-explanation.wrong { background: #FCEBEB; color: #A32D2D; border: 1.5px solid #A32D2D; border-top: none; }
+  /* DS Filled / Large (44px) */
   .quiz-submit {
+    height: 44px;
+    padding: 0 28px;
     background: var(--orange);
     color: #fff;
     border: none;
-    padding: 11px 28px;
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.01em;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
     margin-top: 0.5rem;
   }
-  .quiz-submit:hover { background: var(--orange-dark); }
+  .quiz-submit:hover { background: var(--orange-dark); box-shadow: 0 2px 8px rgba(242,111,33,0.30); }
   .quiz-submit:active { transform: scale(0.97); }
   .quiz-result { display: none; text-align: center; padding: 2rem 1rem; animation: fadeSlide 0.3s ease; }
   .result-icon {
