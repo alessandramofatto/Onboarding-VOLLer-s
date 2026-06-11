@@ -12,36 +12,36 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    /* VOLL DS — Primary */
-    --orange: #E8481A;
-    --orange-dark: #C03A12;
-    --orange-light: #FEF0EB;
-    --orange-mid: #F5C0A8;
+    /* VOLL DS — Brand (brand/400) */
+    --orange: #F26F21;
+    --orange-dark: #D45C10;
+    --orange-light: #FEF3EB;
+    --orange-mid: #F5C09A;
+    --orange-yellow: #FAA919;
 
-    /* VOLL DS — Forest Green */
-    --green: #1D6B4E;
-    --green-dark: #052316;
-    --green-deeper: #031A10;
-    --green-light: #E4FAF1;
+    /* VOLL DS — Success (semantic green kept for UI feedback) */
+    --green: #16A34A;
+    --green-dark: #15803D;
+    --green-light: #DCFCE7;
 
     /* VOLL DS — Surfaces */
-    --bg: #F4F5F2;
+    --bg: #F5F5F7;
     --surface: #FFFFFF;
-    --border: rgba(5,35,22,0.09);
-    --border-mid: rgba(5,35,22,0.16);
+    --border: #E5E5EA;
+    --border-mid: #CCCCD4;
 
-    /* VOLL DS — Text */
-    --text: #052316;
-    --text-muted: #3D5A4A;
-    --text-subtle: #7A9080;
+    /* VOLL DS — Content */
+    --text: #312F3A;
+    --text-muted: #63616C;
+    --text-subtle: #9896A0;
 
     /* VOLL DS — Radius */
-    --radius: 24px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 4px;
 
-    --shadow: 0 1px 3px rgba(5,35,22,0.06), 0 4px 16px rgba(5,35,22,0.04);
-    --shadow-lg: 0 4px 12px rgba(5,35,22,0.08), 0 16px 48px rgba(5,35,22,0.10);
+    --shadow: 0 1px 3px rgba(49,47,58,0.06), 0 4px 16px rgba(49,47,58,0.04);
+    --shadow-lg: 0 4px 12px rgba(49,47,58,0.08), 0 16px 48px rgba(49,47,58,0.10);
   }
 
   body {
@@ -61,7 +61,7 @@
   .welcome-overlay {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #E8481A 0%, #C03A12 100%);
+    background: linear-gradient(135deg, #F26F21 0%, #FAA919 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,7 +70,7 @@
   }
   .welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
   .welcome-card {
-    background: var(--green-dark);
+    background: var(--surface);
     border-radius: var(--radius);
     padding: 2.5rem 2.5rem 2rem;
     max-width: 420px;
@@ -78,11 +78,9 @@
     box-shadow: var(--shadow-lg);
     text-align: center;
     animation: slideUp 0.4s ease;
-    border: 1px solid rgba(255,255,255,0.08);
   }
-  .welcome-card h1 { color: #fff !important; }
-  .welcome-card > p { color: rgba(255,255,255,0.65) !important; }
-  .welcome-hint { color: rgba(255,255,255,0.4) !important; }
+  .welcome-card h1 { color: var(--text); }
+  .welcome-hint { color: var(--text-subtle); }
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -94,17 +92,17 @@
   .welcome-input {
     flex: 1;
     padding: 11px 16px;
-    border: 1.5px solid rgba(255,255,255,0.15);
+    border: 1.5px solid var(--border-mid);
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-family: 'Inter', sans-serif;
-    color: #fff;
-    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    background: var(--bg);
     outline: none;
     transition: border-color 0.15s;
   }
-  .welcome-input::placeholder { color: rgba(255,255,255,0.4); }
-  .welcome-input:focus { border-color: var(--orange); background: rgba(255,255,255,0.14); }
+  .welcome-input::placeholder { color: var(--text-subtle); }
+  .welcome-input:focus { border-color: var(--orange); }
   .welcome-btn {
     padding: 11px 20px;
     background: var(--orange);
@@ -127,7 +125,8 @@
 
   /* ── HEADER ── */
   .site-header {
-    background: var(--green-dark);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     padding: 0 2rem;
     display: flex;
     align-items: center;
@@ -139,16 +138,15 @@
   }
   .site-header img { height: 28px; }
   .header-right { display: flex; align-items: center; gap: 12px; }
-  .header-name { font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500; display: none; }
+  .header-name { font-size: 13px; color: var(--text-muted); font-weight: 500; display: none; }
   .header-badge {
     font-size: 12px;
     font-weight: 600;
-    color: var(--green-dark);
+    color: #fff;
     background: var(--orange);
     padding: 5px 14px;
     border-radius: 20px;
     letter-spacing: 0.02em;
-    color: #fff;
   }
 
   /* ── LAYOUT ── */
@@ -156,7 +154,7 @@
 
   /* ── HERO ── */
   .hero {
-    background: linear-gradient(135deg, var(--green-dark) 0%, #0A3825 100%);
+    background: linear-gradient(to right, #F26F21, #FAA919);
     border-radius: var(--radius);
     padding: 2rem 2.5rem;
     margin-bottom: 2rem;
@@ -169,33 +167,24 @@
   .hero::after {
     content: '';
     position: absolute;
-    top: -40px; right: -40px;
-    width: 180px; height: 180px;
-    background: radial-gradient(circle, rgba(232,72,26,0.18) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    bottom: -20px; left: 40%;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(29,107,78,0.4) 0%, transparent 70%);
+    top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
   .hero-icon {
     width: 48px; height: 48px;
     border-radius: 50%;
-    background: rgba(232,72,26,0.2);
-    border: 1.5px solid rgba(232,72,26,0.4);
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.35);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .hero-icon i { font-size: 22px; color: var(--orange); }
+  .hero-icon i { font-size: 22px; color: #fff; }
   .hero-text h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #fff; }
-  .hero-text p { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.65; }
-  .name-highlight { color: var(--orange); }
+  .hero-text p { font-size: 14px; color: rgba(255,255,255,0.80); line-height: 1.65; }
+  .name-highlight { color: #fff; font-weight: 700; }
 
   /* ── SECTION LABEL ── */
   .section-label {
