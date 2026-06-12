@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editar políticas — VOLL Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #F26F21;
+  --orange-dark: #D45C10;
+  --orange-light: #FEF3EB;
+  --orange-wash: #FDF6F0;
+  --green: #16A34A;
+  --green-light: #DCFCE7;
+  --bg: #F5F5F7;
+  --surface: #FFFFFF;
+  --border: #E5E5EA;
+  --border-mid: #CCCCD4;
+  --text: #312F3A;
+  --text-muted: #63616C;
+  --text-subtle: #9896A0;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(49,47,58,0.06), 0 4px 16px rgba(49,47,58,0.04);
+  --shadow-md: 0 2px 8px rgba(49,47,58,0.08), 0 8px 24px rgba(49,47,58,0.07);
+  --shadow-lg: 0 4px 12px rgba(49,47,58,0.10), 0 16px 48px rgba(49,47,58,0.12);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── LAYOUT SHELL ── */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 248px;
+  flex-shrink: 0;
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-burger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 12px 12px 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.sidebar-burger:hover { background: var(--bg); }
+.sidebar-burger i { font-size: 20px; }
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  padding: 14px 18px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1px 8px 1px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background 0.12s, color 0.12s;
+  text-decoration: none;
+  user-select: none;
+}
+.nav-item i { font-size: 18px; flex-shrink: 0; }
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active {
+  border-left-color: var(--orange);
+  background: var(--orange-light);
+  color: var(--orange-dark);
+  font-weight: 600;
+}
+
+.nav-group {}
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1px 8px 1px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background 0.12s;
+  user-select: none;
+}
+.nav-group-header i.group-icon { font-size: 18px; flex-shrink: 0; }
+.nav-group-header:hover { background: var(--bg); }
+.nav-group-header .chev { margin-left: auto; font-size: 14px; transition: transform 0.2s; }
+.nav-group.open .chev { transform: rotate(180deg); }
+
+.nav-sub { display: none; }
+.nav-group.open .nav-sub { display: block; }
+
+.nav-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 40px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1px 8px 1px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background 0.12s, color 0.12s;
+  user-select: none;
+  text-decoration: none;
+}
+.nav-sub-item i { font-size: 15px; flex-shrink: 0; }
+.nav-sub-item:hover { background: var(--bg); color: var(--text); }
+.nav-sub-item.active {
+  border-left-color: var(--orange);
+  background: var(--orange-light);
+  color: var(--orange-dark);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 18px 16px;
+  font-size: 11px;
+  color: var(--text-subtle);
+  border-top: 1px solid var(--border);
+}
+
+.novo-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--orange-dark);
+  background: var(--orange-light);
+  padding: 1px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+/* ── MAIN AREA ── */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TOP HEADER ── */
+.top-header {
+  height: 60px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px 0 0;
+  gap: 0;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+}
+.header-brand img { height: 26px; width: auto; display: block; }
+.header-brand .brand-admin { font: 700 16px/1 'Inter', sans-serif; color: var(--text); letter-spacing: 0.01em; }
+.header-brand .brand-sep { width: 1px; height: 20px; background: var(--border-mid); }
+.header-brand .brand-voll { font: 500 15px/1 'Inter', sans-serif; color: var(--text-subtle); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.header-date { font: 400 13px/1 'Inter', sans-serif; color: var(--text-muted); }
+.header-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font: 600 13px/1 'Inter', sans-serif;
+  flex-shrink: 0;
+}
+
+/* ── SCROLL AREA ── */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 28px 48px 16px;
+}
+.content-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── PAGE TITLE ROW ── */
+.page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  transition: background 0.12s;
+  flex-shrink: 0;
+  margin-left: -4px;
+}
+.back-btn:hover { background: var(--bg); }
+.back-btn i { font-size: 22px; }
+.page-title {
+  font: 600 24px/32px 'Open Sans', sans-serif;
+  color: var(--text);
+}
+.status-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font: 600 12px/1 'Inter', sans-serif;
+  background: var(--green-light);
+  color: var(--green);
+}
+.status-badge-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ── FIELD ROW ── */
+.field-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-group label {
+  font: 600 13px/1 'Inter', sans-serif;
+  color: var(--text);
+}
+.field-group label .required { color: var(--orange); margin-left: 2px; }
+.field-input {
+  height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font: 400 14px/1 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.field-input::placeholder { color: var(--text-subtle); }
+.field-input:focus { border-color: var(--orange); }
+
+/* ── MODULES LAYOUT ── */
+.modules-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* ── RAIL ── */
+.rail-card {
+  position: relative;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+}
+.rail-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px;
+}
+.rail-burger {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: background 0.12s;
+}
+.rail-burger:hover { background: var(--bg); }
+.rail-burger i { font-size: 19px; }
+.rail-sep { width: 26px; height: 1px; background: var(--border); margin: 2px 0 4px; }
+
+.rail-btn {
+  position: relative;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-subtle);
+  transition: background 0.12s, color 0.12s;
+}
+.rail-btn:hover { background: var(--bg); color: var(--text-muted); }
+.rail-btn.active {
+  background: var(--orange-light);
+  color: var(--orange-dark);
+}
+.rail-btn i { font-size: 18px; }
+.rail-accent {
+  position: absolute;
+  left: -4px; top: 10px; bottom: 10px;
+  width: 3px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background 0.12s;
+}
+.rail-btn.active .rail-accent { background: var(--orange); }
+
+/* ── FLYOUT ── */
+.rail-flyout {
+  display: none;
+  position: absolute;
+  top: 12px; left: 76px;
+  width: 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  z-index: 40;
+  flex-direction: column;
+  gap: 2px;
+}
+.rail-flyout.open { display: flex; }
+.flyout-label {
+  font: 600 10px/16px 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  padding: 6px 14px 4px;
+}
+.flyout-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font: 500 14px/20px 'Inter', sans-serif;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: border-color 0.12s, background 0.12s;
+}
+.flyout-item:hover { border-color: var(--border-mid); background: var(--bg); }
+.flyout-item.active {
+  background: var(--orange-light);
+  color: var(--orange-dark);
+  font-weight: 600;
+  border-color: transparent;
+}
+.flyout-accent {
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 999px;
+  background: transparent;
+}
+.flyout-item.active .flyout-accent { background: var(--orange); }
+.flyout-item i { font-size: 18px; flex-shrink: 0; }
+
+/* ── MODULE CONTENT AREA ── */
+.module-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── AI ALERT ── */
+.ai-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--green-light);
+  border: 1px solid #86EFAC;
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: #15803D;
+  animation: fadeSlide 0.25s ease;
+}
+.ai-alert i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.ai-alert-body { flex: 1; }
+.ai-alert strong { font-weight: 600; display: block; margin-bottom: 2px; }
+.ai-alert-close {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #15803D;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+.ai-alert-close i { font-size: 16px; }
+
+/* ── MODULE CARD ── */
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow);
+}
+.module-card-icon {
+  width: 46px; height: 46px;
+  border-radius: 11px;
+  background: var(--orange-light);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--orange-dark);
+  flex-shrink: 0;
+}
+.module-card-icon i { font-size: 22px; }
+.module-card-info { flex: 1; min-width: 0; }
+.module-card-title { font: 600 16px/24px 'Inter', sans-serif; color: var(--text); }
+.module-card-desc { font: 400 13px/20px 'Inter', sans-serif; color: var(--text-muted); }
+
+/* ── TOGGLE ── */
+.toggle-wrap {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track {
+  width: 40px; height: 24px;
+  background: var(--border-mid);
+  border-radius: 999px;
+  transition: background 0.2s;
+  display: block;
+}
+.toggle-wrap input:checked ~ .toggle-track { background: var(--orange); }
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+  pointer-events: none;
+}
+.toggle-wrap input:checked ~ .toggle-thumb { transform: translateX(16px); }
+
+/* ── ACCORDIONS ── */
+.accordion {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+.accordion-header:hover { background: var(--bg); }
+.accordion-title { flex: 1; font: 600 15px/22px 'Inter', sans-serif; color: var(--text); }
+.accordion-chev {
+  color: var(--text-subtle);
+  transition: transform 0.18s ease;
+  display: flex;
+}
+.accordion-chev i { font-size: 18px; }
+.accordion.open .accordion-chev { transform: rotate(180deg); }
+.accordion-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 18px 20px;
+}
+.accordion.open .accordion-body { display: block; }
+
+/* ── FORM ELEMENTS ── */
+.field-help {
+  font: 400 13px/18px 'Inter', sans-serif;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.form-col { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font: 600 13px/1 'Inter', sans-serif; color: var(--text); }
+.form-input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font: 400 14px/1 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-input:focus { border-color: var(--orange); }
+.form-select {
+  height: 38px;
+  padding: 0 32px 0 12px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font: 400 14px/1 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239896A0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.form-select:focus { border-color: var(--orange); }
+
+/* Switch row list */
+.switch-list { display: flex; flex-direction: column; }
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+}
+.switch-row + .switch-row { border-top: 1px solid var(--border); }
+.switch-row-info { min-width: 0; }
+.switch-row-label { font: 600 14px/20px 'Inter', sans-serif; color: var(--text); }
+.switch-row-help { font: 400 12px/16px 'Inter', sans-serif; color: var(--text-muted); margin-top: 2px; }
+
+/* Fare table */
+.fare-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.fare-row:last-child { margin-bottom: 0; }
+.fare-cabin { flex: 1; min-width: 140px; font: 600 14px/20px 'Inter', sans-serif; color: var(--text); }
+.fare-price { width: 150px; }
+
+/* Disabled state */
+.module-disabled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 44px 24px;
+  background: var(--surface);
+  border: 1.5px dashed var(--border-mid);
+  border-radius: var(--radius);
+}
+.module-disabled i { font-size: 40px; color: var(--border-mid); }
+.module-disabled-title { font: 600 16px/24px 'Inter', sans-serif; color: var(--text); }
+.module-disabled-desc { font: 400 14px/20px 'Inter', sans-serif; color: var(--text-muted); max-width: 380px; }
+
+/* ── AI CARD ── */
+.ai-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #F26F21 0%, #E8582B 50%, #F26F21 100%);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-md);
+}
+.ai-card-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+.ai-card-icon i { font-size: 26px; }
+.ai-card-text { flex: 1; min-width: 220px; }
+.ai-card-title { font: 600 17px/24px 'Inter', sans-serif; color: #fff; margin-bottom: 4px; }
+.ai-card-desc { font: 400 13px/20px 'Inter', sans-serif; color: rgba(255,255,255,0.92); max-width: 560px; }
+.ai-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: var(--orange-dark);
+  border: 0;
+  border-radius: 10px;
+  padding: 0 18px;
+  height: 44px;
+  font: 600 14px/1 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.14);
+  transition: box-shadow 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.ai-card-btn:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+.ai-card-btn:active { transform: scale(0.97); }
+.ai-card-btn i { font-size: 18px; }
+
+/* ── FOOTER ACTIONS ── */
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+}
+.btn-ghost {
+  height: 40px;
+  padding: 0 18px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font: 600 14px/1 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.btn-ghost:hover { border-color: var(--border-mid); color: var(--text); background: var(--bg); }
+.btn-primary {
+  height: 40px;
+  padding: 0 20px;
+  background: var(--orange);
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font: 600 14px/1 'Inter', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+  margin-left: auto;
+}
+.btn-primary:hover { background: var(--orange-dark); box-shadow: 0 2px 8px rgba(242,111,33,0.3); }
+.btn-primary:active { transform: scale(0.97); }
+.btn-primary i { font-size: 16px; }
+
+/* ── AI MODAL ── */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(25,25,27,0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 24px;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  width: min(580px, 100%);
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: fadeSlide 0.22s ease;
+}
+.modal-head {
+  padding: 22px 24px;
+  background: linear-gradient(135deg, #F26F21 0%, #E8582B 100%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.modal-head-icon {
+  width: 44px; height: 44px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+.modal-head-icon i { font-size: 22px; }
+.modal-head-title { font: 600 17px/24px 'Inter', sans-serif; color: #fff; }
+.modal-head-sub { font: 400 13px/18px 'Inter', sans-serif; color: rgba(255,255,255,0.9); }
+.modal-body { padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; }
+.modal-textarea {
+  width: 100%;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: 400 14px/20px 'Inter', sans-serif;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  background: var(--surface);
+  min-height: 100px;
+  transition: border-color 0.15s;
+}
+.modal-textarea:focus { border-color: var(--orange); }
+.modal-textarea::placeholder { color: var(--text-subtle); }
+.modal-chips-label {
+  font: 600 11px/16px 'Inter', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 6px;
+}
+.modal-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.modal-chip {
+  font: 500 13px/18px 'Inter', sans-serif;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.modal-chip:hover { border-color: var(--orange); color: var(--orange-dark); }
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.btn-brand {
+  height: 40px;
+  padding: 0 20px;
+  background: var(--orange);
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font: 600 14px/1 'Inter', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-brand:hover { background: var(--orange-dark); box-shadow: 0 2px 8px rgba(242,111,33,0.3); }
+.btn-brand i { font-size: 16px; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <button class="sidebar-burger" onclick="void 0" title="Menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+
+    <nav style="flex:1;padding:8px 0;">
+      <a href="#" class="nav-item">
+        <i class="ti ti-home"></i>
+        <span>Início</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="ti ti-apps"></i>
+        <span>SmartHub</span>
+        <span class="novo-pill">Novo</span>
+      </a>
+
+      <div class="nav-group" id="group-dados">
+        <div class="nav-group-header" onclick="toggleGroup('dados')">
+          <i class="ti ti-chart-histogram group-icon"></i>
+          <span>Dados</span>
+          <i class="ti ti-chevron-down chev"></i>
+        </div>
+        <div class="nav-sub">
+          <a href="#" class="nav-sub-item"><i class="ti ti-chart-pie"></i> Painéis</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-file-invoice"></i> Relatórios</a>
+        </div>
+      </div>
+
+      <div class="nav-group open" id="group-cadastros">
+        <div class="nav-group-header" onclick="toggleGroup('cadastros')">
+          <i class="ti ti-folder group-icon"></i>
+          <span>Cadastros</span>
+          <i class="ti ti-chevron-down chev"></i>
+        </div>
+        <div class="nav-sub">
+          <a href="#" class="nav-sub-item active"><i class="ti ti-shield-check"></i> Políticas de viagens</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-building"></i> Empresas</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-folder"></i> Projetos</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-currency-dollar"></i> Centros de custo</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-user"></i> Usuários</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-badge"></i> Aprovadores</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-help"></i> Motivos</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-message"></i> Justificativas</a>
+          <a href="#" class="nav-sub-item"><i class="ti ti-briefcase"></i> Passageiro</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">11.4.4</div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-brand">
+        <img src="logo.svg" alt="VOLL" onerror="this.style.display='none'" />
+        <span class="brand-admin">ADMIN</span>
+        <span class="brand-sep"></span>
+        <span class="brand-voll">VOLL</span>
+      </div>
+      <div class="header-right">
+        <span class="header-date">qui., 11 jun. 2026</span>
+        <span class="header-avatar">AR</span>
+      </div>
+    </header>
+
+    <!-- SCROLL AREA -->
+    <div class="content-scroll">
+      <div class="content-inner">
+
+        <!-- TITLE ROW -->
+        <div class="page-title-row">
+          <button class="back-btn" onclick="history.back()" aria-label="Voltar">
+            <i class="ti ti-chevron-left"></i>
+          </button>
+          <h1 class="page-title">Editar políticas</h1>
+          <span class="status-badge">
+            <span class="status-badge-dot"></span>
+            Ativa
+          </span>
+        </div>
+
+        <!-- NAME + CODE FIELDS -->
+        <div class="field-row">
+          <div class="field-group" style="flex:2;min-width:280px;">
+            <label for="field-name">Nome da política <span class="required">*</span></label>
+            <input id="field-name" class="field-input" type="text" value="Política comercial nacional" placeholder="Ex.: Política comercial nacional" />
+          </div>
+          <div class="field-group" style="flex:1;min-width:200px;">
+            <label for="field-code">Código (opcional)</label>
+            <input id="field-code" class="field-input" type="text" value="POL-2026-014" placeholder="Ex.: POL-2026-01" />
+          </div>
+        </div>
+
+        <!-- MODULES LAYOUT -->
+        <div class="modules-layout">
+
+          <!-- RAIL -->
+          <div class="rail-card" id="rail-card">
+            <div class="rail-inner">
+              <button class="rail-burger" onclick="toggleRail()" title="Expandir módulos">
+                <i class="ti ti-menu-2"></i>
+              </button>
+              <span class="rail-sep"></span>
+
+              <button class="rail-btn active" id="rail-aereas" onclick="selectModule('aereas')" title="Passagens aéreas">
+                <span class="rail-accent"></span>
+                <i class="ti ti-plane"></i>
+              </button>
+              <button class="rail-btn" id="rail-hotel" onclick="selectModule('hotel')" title="Hotel">
+                <span class="rail-accent"></span>
+                <i class="ti ti-bed"></i>
+              </button>
+              <button class="rail-btn" id="rail-onibus" onclick="selectModule('onibus')" title="Ônibus">
+                <span class="rail-accent"></span>
+                <i class="ti ti-bus"></i>
+              </button>
+              <button class="rail-btn" id="rail-carro" onclick="selectModule('carro')" title="Aluguel de carro">
+                <span class="rail-accent"></span>
+                <i class="ti ti-car"></i>
+              </button>
+              <button class="rail-btn" id="rail-wallet" onclick="selectModule('wallet')" title="VOLL Wallet">
+                <span class="rail-accent"></span>
+                <i class="ti ti-wallet"></i>
+              </button>
+              <button class="rail-btn" id="rail-mobilidade" onclick="selectModule('mobilidade')" title="Mobilidade">
+                <span class="rail-accent"></span>
+                <i class="ti ti-route"></i>
+              </button>
+              <button class="rail-btn" id="rail-reembolso" onclick="selectModule('reembolso')" title="Reembolso">
+                <span class="rail-accent"></span>
+                <i class="ti ti-receipt"></i>
+              </button>
+            </div>
+
+            <!-- FLYOUT -->
+            <div class="rail-flyout" id="rail-flyout">
+              <span class="flyout-label">Módulos</span>
+              <button class="flyout-item active" id="fly-aereas" onclick="selectModule('aereas')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-plane"></i> Passagens aéreas
+              </button>
+              <button class="flyout-item" id="fly-hotel" onclick="selectModule('hotel')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-bed"></i> Hotel
+              </button>
+              <button class="flyout-item" id="fly-onibus" onclick="selectModule('onibus')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-bus"></i> Ônibus
+              </button>
+              <button class="flyout-item" id="fly-carro" onclick="selectModule('carro')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-car"></i> Aluguel de carro
+              </button>
+              <button class="flyout-item" id="fly-wallet" onclick="selectModule('wallet')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-wallet"></i> VOLL Wallet
+              </button>
+              <button class="flyout-item" id="fly-mobilidade" onclick="selectModule('mobilidade')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-route"></i> Mobilidade
+              </button>
+              <button class="flyout-item" id="fly-reembolso" onclick="selectModule('reembolso')">
+                <span class="flyout-accent"></span>
+                <i class="ti ti-receipt"></i> Reembolso
+              </button>
+            </div>
+          </div>
+
+          <!-- MODULE CONTENT AREA -->
+          <div class="module-content" id="module-content">
+
+            <!-- AI ALERT (hidden by default) -->
+            <div class="ai-alert" id="ai-alert" style="display:none;">
+              <i class="ti ti-sparkles"></i>
+              <div class="ai-alert-body">
+                <strong>Sugestão gerada com IA</strong>
+                A Voll preparou os módulos e regras sugeridos. Revise cada item antes de continuar.
+              </div>
+              <button class="ai-alert-close" onclick="dismissAiAlert()">
+                <i class="ti ti-x"></i>
+              </button>
+            </div>
+
+            <!-- MODULE CARD -->
+            <div class="module-card" id="module-card">
+              <div class="module-card-icon" id="module-icon">
+                <i class="ti ti-plane"></i>
+              </div>
+              <div class="module-card-info">
+                <div class="module-card-title" id="module-title">Passagens aéreas</div>
+                <div class="module-card-desc" id="module-desc">Usuários terão acesso ao Voll Flight com voos sinalizados pela política.</div>
+              </div>
+              <label class="toggle-wrap" title="Ativar/desativar módulo">
+                <input type="checkbox" id="module-toggle" checked onchange="toggleModule()" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </label>
+            </div>
+
+            <!-- ACCORDIONS CONTAINER -->
+            <div id="accordions-wrap"></div>
+
+            <!-- DISABLED STATE -->
+            <div class="module-disabled" id="module-disabled" style="display:none;">
+              <i class="ti ti-circle-off"></i>
+              <div class="module-disabled-title">Módulo desativado</div>
+              <div class="module-disabled-desc" id="module-disabled-desc">Ative o módulo no topo para configurar as regras desta categoria.</div>
+            </div>
+
+            <!-- AI CARD -->
+            <div class="ai-card">
+              <div class="ai-card-icon"><i class="ti ti-sparkles"></i></div>
+              <div class="ai-card-text">
+                <div class="ai-card-title">Criar mais políticas com IA</div>
+                <div class="ai-card-desc">Descreva as regras em linguagem natural e a Voll monta os módulos e configura tudo para você revisar.</div>
+              </div>
+              <button class="ai-card-btn" onclick="openModal()">
+                <i class="ti ti-wand"></i>
+                Começar com IA
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FOOTER ACTIONS -->
+        <div class="footer-actions">
+          <button class="btn-ghost" onclick="history.back()">Cancelar</button>
+          <button class="btn-primary">
+            Continuar para aprovação
+            <i class="ti ti-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI MODAL -->
+<div class="modal-backdrop" id="ai-modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-head-icon"><i class="ti ti-sparkles"></i></div>
+      <div>
+        <div class="modal-head-title">Criar políticas com IA</div>
+        <div class="modal-head-sub">Descreva e a Voll monta os módulos para você.</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <textarea class="modal-textarea" id="modal-textarea" rows="4" placeholder="Ex.: Time comercial pode voar econômica até R$ 1.500, hotéis até R$ 400 a diária e reembolso de alimentação até R$ 80 por dia."></textarea>
+      <div>
+        <div class="modal-chips-label">Sugestões</div>
+        <div class="modal-chips">
+          <span class="modal-chip" onclick="setPrompt('Política para diretoria')">Política para diretoria</span>
+          <span class="modal-chip" onclick="setPrompt('Viagens internacionais')">Viagens internacionais</span>
+          <span class="modal-chip" onclick="setPrompt('Equipe de vendas')">Equipe de vendas</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn-brand" onclick="generatePolicy()">
+          <i class="ti ti-sparkles"></i>
+          Gerar política
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const MODULES = [
+  { id: 'aereas',    label: 'Passagens aéreas', icon: 'ti-plane',    desc: 'Usuários terão acesso ao Voll Flight com voos sinalizados pela política.' },
+  { id: 'hotel',     label: 'Hotel',             icon: 'ti-bed',      desc: 'Reservas de hotéis seguindo limites de diária e categorias aprovadas.' },
+  { id: 'onibus',    label: 'Ônibus',            icon: 'ti-bus',      desc: 'Passagens rodoviárias dentro das classes e valores permitidos.' },
+  { id: 'carro',     label: 'Aluguel de carro',  icon: 'ti-car',      desc: 'Locação de veículos nas categorias e proteções definidas.' },
+  { id: 'wallet',    label: 'VOLL Wallet',        icon: 'ti-wallet',   desc: 'Saldo corporativo para despesas dentro das regras da empresa.' },
+  { id: 'mobilidade',label: 'Mobilidade',         icon: 'ti-route',    desc: 'Corridas por aplicativo com limites por viagem e por mês.' },
+  { id: 'reembolso', label: 'Reembolso',          icon: 'ti-receipt',  desc: 'Solicitações de reembolso com categorias e comprovantes exigidos.' }
+];
+
+const SECTIONS = {
+  aereas: [
+    { key: 'antecedencia', title: 'Antecedência de reserva', type: 'switch-number',
+      spec: { label: 'Exigir antecedência mínima para emissão', num: '14', unit: 'dias', select: ['Dias corridos', 'Dias úteis'], helper: 'Reservas abaixo do prazo exigirão justificativa e aprovação do gestor.' } },
+    { key: 'classe', title: 'Preço por classe tarifária', type: 'fare',
+      spec: { rows: [
+        { cabin: 'Econômica',         allowed: true,  price: 'R$ 1.200,00' },
+        { cabin: 'Econômica Premium', allowed: true,  price: 'R$ 2.000,00' },
+        { cabin: 'Executiva',         allowed: false, price: 'R$ 6.500,00' },
+        { cabin: 'Primeira classe',   allowed: false, price: 'R$ 0,00' }
+      ]}},
+    { key: 'cap', title: 'Exceções de CAP', type: 'switches',
+      spec: { intro: 'Defina como tratar voos acima do valor de CAP da rota.', items: [
+        { label: 'Permitir compra acima do CAP com aprovação', on: true },
+        { label: 'Notificar o gestor responsável', on: true, helper: 'O gestor recebe um alerta a cada exceção.' },
+        { label: 'Bloquear automaticamente acima do limite', on: false }
+      ]}},
+    { key: 'bagagem', title: 'Tarifas com bagagem despachada', type: 'switches',
+      spec: { items: [
+        { label: 'Priorizar tarifas com bagagem inclusa', on: true },
+        { label: 'Permitir compra avulsa de bagagem', on: false, helper: 'Quando a tarifa não incluir despacho.' }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: dê preferência a voos diretos e companhias parceiras…' } }
+  ],
+  hotel: [
+    { key: 'diaria', title: 'Valor máximo da diária', type: 'money',
+      spec: { label: 'Limitar valor da diária', value: 'R$ 450,00', scope: ['Por cidade', 'Valor único nacional', 'Por categoria'], helper: 'Diárias acima do limite precisam de aprovação.' } },
+    { key: 'categoria', title: 'Categorias permitidas', type: 'switches',
+      spec: { intro: 'Selecione as categorias liberadas para reserva.', items: [
+        { label: 'Até 3 estrelas', on: true },
+        { label: '4 estrelas', on: true },
+        { label: '5 estrelas', on: false, helper: 'Requer aprovação do gestor.' }
+      ]}},
+    { key: 'reembolsavel', title: 'Tarifa e benefícios', type: 'switches',
+      spec: { items: [
+        { label: 'Exigir tarifa reembolsável', on: false },
+        { label: 'Priorizar diárias com café da manhã', on: true }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: priorize hotéis próximos ao endereço do cliente…' } }
+  ],
+  onibus: [
+    { key: 'classe', title: 'Classes permitidas', type: 'switches',
+      spec: { items: [
+        { label: 'Convencional', on: true },
+        { label: 'Executivo', on: true },
+        { label: 'Semi-leito', on: true },
+        { label: 'Leito', on: false, helper: 'Requer aprovação.' }
+      ]}},
+    { key: 'antecedencia', title: 'Antecedência de reserva', type: 'switch-number',
+      spec: { label: 'Exigir antecedência mínima', num: '3', unit: 'dias', helper: 'Compras de última hora exigem justificativa.' } },
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: dê preferência a viagens diurnas…' } }
+  ],
+  carro: [
+    { key: 'categoria', title: 'Categorias permitidas', type: 'switches',
+      spec: { items: [
+        { label: 'Econômico', on: true },
+        { label: 'Intermediário', on: true },
+        { label: 'SUV', on: false },
+        { label: 'Premium', on: false, helper: 'Requer aprovação.' }
+      ]}},
+    { key: 'protecao', title: 'Proteções e seguros', type: 'switches',
+      spec: { items: [
+        { label: 'Exigir proteção básica (LDW)', on: true },
+        { label: 'Permitir proteção total', on: true },
+        { label: 'Permitir condutor adicional', on: false }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: devolução com o tanque cheio…' } }
+  ],
+  wallet: [
+    { key: 'limite', title: 'Limite de saldo', type: 'money',
+      spec: { label: 'Definir limite por colaborador', value: 'R$ 1.000,00', scope: ['Mensal', 'Semanal', 'Por viagem'], helper: 'O saldo é renovado conforme o período.' } },
+    { key: 'categorias', title: 'Onde o saldo pode ser usado', type: 'switches',
+      spec: { items: [
+        { label: 'Alimentação', on: true },
+        { label: 'Transporte', on: true },
+        { label: 'Hospedagem', on: false },
+        { label: 'Outros', on: false }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: guarde o comprovante de cada gasto…' } }
+  ],
+  mobilidade: [
+    { key: 'limite', title: 'Limite por corrida', type: 'money',
+      spec: { label: 'Limitar valor por corrida', value: 'R$ 80,00', scope: ['Por corrida', 'Diário', 'Mensal'], helper: 'Corridas acima do limite exigem justificativa.' } },
+    { key: 'apps', title: 'Aplicativos permitidos', type: 'switches',
+      spec: { items: [
+        { label: 'Uber', on: true },
+        { label: '99', on: true },
+        { label: 'Táxi credenciado', on: false }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: use categorias econômicas sempre que possível…' } }
+  ],
+  reembolso: [
+    { key: 'prazo', title: 'Prazo de envio', type: 'switch-number',
+      spec: { label: 'Exigir envio dentro do prazo', num: '30', unit: 'dias', helper: 'Após o prazo, o reembolso precisa de aprovação especial.' } },
+    { key: 'categorias', title: 'Categorias reembolsáveis', type: 'switches',
+      spec: { intro: 'Defina o que pode ser solicitado como reembolso.', items: [
+        { label: 'Alimentação', on: true },
+        { label: 'Transporte', on: true },
+        { label: 'Hospedagem', on: true },
+        { label: 'Outros', on: false, helper: 'Avaliados caso a caso.' }
+      ]}},
+    { key: 'comprovantes', title: 'Comprovantes', type: 'switches',
+      spec: { items: [
+        { label: 'Exigir nota fiscal', on: true },
+        { label: 'Aceitar recibo simples', on: false },
+        { label: 'Comprovante obrigatório acima de R$ 50', on: true }
+      ]}},
+    { key: 'orientacoes', title: 'Orientações da empresa', type: 'note',
+      spec: { placeholder: 'Ex.: descreva o motivo de cada despesa…' } }
+  ]
+};
+
+// ── STATE ──
+let activeModule = 'aereas';
+let enabled = { aereas: true, hotel: true, onibus: false, carro: false, wallet: false, mobilidade: false, reembolso: false };
+let openAccordions = { 'aereas:antecedencia': true, 'aereas:classe': true };
+let railOpen = false;
+
+// ── SIDEBAR ──
+function toggleGroup(id) {
+  const g = document.getElementById('group-' + id);
+  g.classList.toggle('open');
+}
+
+// ── RAIL ──
+function toggleRail() {
+  railOpen = !railOpen;
+  document.getElementById('rail-flyout').classList.toggle('open', railOpen);
+}
+
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('rail-card').contains(e.target)) {
+    railOpen = false;
+    document.getElementById('rail-flyout').classList.remove('open');
+  }
+});
+
+function selectModule(id) {
+  activeModule = id;
+  railOpen = false;
+  document.getElementById('rail-flyout').classList.remove('open');
+
+  // Update rail buttons
+  MODULES.forEach(m => {
+    document.getElementById('rail-' + m.id).classList.toggle('active', m.id === id);
+    document.getElementById('fly-' + m.id).classList.toggle('active', m.id === id);
+  });
+
+  renderModuleContent();
+}
+
+// ── MODULE RENDER ──
+function renderModuleContent() {
+  const m = MODULES.find(x => x.id === activeModule);
+
+  // Update module card
+  document.getElementById('module-icon').innerHTML = '<i class="ti ' + m.icon + '"></i>';
+  document.getElementById('module-title').textContent = m.label;
+  document.getElementById('module-desc').textContent = m.desc;
+  document.getElementById('module-toggle').checked = !!enabled[activeModule];
+
+  // Show/hide disabled state
+  const isEnabled = !!enabled[activeModule];
+  document.getElementById('accordions-wrap').style.display = isEnabled ? 'flex' : 'none';
+  document.getElementById('accordions-wrap').style.flexDirection = 'column';
+  document.getElementById('accordions-wrap').style.gap = '12px';
+  document.getElementById('module-disabled').style.display = isEnabled ? 'none' : 'flex';
+  document.getElementById('module-disabled-desc').textContent = 'Ative ' + m.label + ' no topo para configurar as regras desta categoria.';
+
+  if (isEnabled) renderAccordions();
+}
+
+function renderAccordions() {
+  const wrap = document.getElementById('accordions-wrap');
+  wrap.innerHTML = '';
+  const sections = SECTIONS[activeModule] || [];
+  sections.forEach(sec => {
+    const okey = activeModule + ':' + sec.key;
+    const isOpen = !!openAccordions[okey];
+    const el = document.createElement('div');
+    el.className = 'accordion' + (isOpen ? ' open' : '');
+    el.id = 'acc-' + okey.replace(':', '-');
+
+    const header = document.createElement('button');
+    header.className = 'accordion-header';
+    header.innerHTML = '<span class="accordion-title">' + sec.title + '</span><span class="accordion-chev"><i class="ti ti-chevron-down"></i></span>';
+    header.onclick = () => toggleAccordion(okey);
+
+    const body = document.createElement('div');
+    body.className = 'accordion-body';
+    body.innerHTML = buildBody(sec);
+
+    el.appendChild(header);
+    el.appendChild(body);
+    wrap.appendChild(el);
+  });
+}
+
+function toggleAccordion(okey) {
+  openAccordions[okey] = !openAccordions[okey];
+  const id = 'acc-' + okey.replace(':', '-');
+  document.getElementById(id).classList.toggle('open', openAccordions[okey]);
+}
+
+function toggleModule() {
+  enabled[activeModule] = !enabled[activeModule];
+  renderModuleContent();
+}
+
+function buildBody(sec) {
+  const s = sec.spec;
+  switch (sec.type) {
+    case 'switch-number': return `
+      <div class="field-help">${s.intro || ''}</div>
+      <div class="switch-row" style="padding-top:${s.intro ? '8px' : '0'};border-top:none;">
+        <div class="switch-row-info">
+          <div class="switch-row-label">${s.label}</div>
+        </div>
+        <label class="toggle-wrap">
+          <input type="checkbox" checked />
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+      <div class="form-row" style="margin-top:12px;">
+        <div class="form-col" style="width:160px;">
+          <label class="form-label">Mínimo de ${s.unit}</label>
+          <input class="form-input" type="number" value="${s.num}" />
+        </div>
+        ${s.select ? `<div class="form-col" style="min-width:200px;">
+          <label class="form-label">Contagem</label>
+          <select class="form-select">${s.select.map(o => '<option>' + o + '</option>').join('')}</select>
+        </div>` : ''}
+      </div>
+      ${s.helper ? `<p class="field-help" style="margin-top:10px;">${s.helper}</p>` : ''}
+    `;
+    case 'money': return `
+      <div class="switch-row" style="border-top:none;padding-top:0;">
+        <div class="switch-row-info">
+          <div class="switch-row-label">${s.label}</div>
+        </div>
+        <label class="toggle-wrap">
+          <input type="checkbox" checked />
+          <span class="toggle-track"></span>
+          <span class="toggle-thumb"></span>
+        </label>
+      </div>
+      <div class="form-row" style="margin-top:12px;">
+        <div class="form-col" style="width:190px;">
+          <label class="form-label">Valor máximo</label>
+          <input class="form-input" type="text" value="${s.value}" />
+        </div>
+        <div class="form-col" style="min-width:200px;">
+          <label class="form-label">Aplicar</label>
+          <select class="form-select">${s.scope.map(o => '<option>' + o + '</option>').join('')}</select>
+        </div>
+      </div>
+      ${s.helper ? `<p class="field-help" style="margin-top:10px;">${s.helper}</p>` : ''}
+    `;
+    case 'switches': return `
+      ${s.intro ? `<p class="field-help">${s.intro}</p>` : ''}
+      <div class="switch-list">
+        ${s.items.map((it, i) => `
+          <div class="switch-row">
+            <div class="switch-row-info">
+              <div class="switch-row-label">${it.label}</div>
+              ${it.helper ? `<div class="switch-row-help">${it.helper}</div>` : ''}
+            </div>
+            <label class="toggle-wrap">
+              <input type="checkbox" ${it.on ? 'checked' : ''} />
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    case 'fare': return `
+      <p class="field-help">Defina quais classes são permitidas e o valor máximo por trecho.</p>
+      ${s.rows.map(r => `
+        <div class="fare-row">
+          <span class="fare-cabin">${r.cabin}</span>
+          <label class="toggle-wrap" style="margin-right:4px;">
+            <input type="checkbox" ${r.allowed ? 'checked' : ''} />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+          <span style="font:400 12px/1 'Inter',sans-serif;color:var(--text-muted);min-width:60px;">${r.allowed ? 'Permitida' : 'Bloqueada'}</span>
+          <div class="fare-price">
+            <input class="form-input" type="text" value="${r.price}" placeholder="R$ 0,00" style="height:34px;" />
+          </div>
+        </div>
+      `).join('')}
+    `;
+    case 'note': return `
+      <textarea rows="4" placeholder="${s.placeholder}" style="width:100%;border:1.5px solid var(--border-mid);border-radius:10px;padding:12px 14px;font:400 14px/20px 'Inter',sans-serif;color:var(--text);resize:vertical;outline:none;background:var(--surface);box-sizing:border-box;"></textarea>
+    `;
+    default: return '<p class="field-help">Configurações em breve.</p>';
+  }
+}
+
+// ── MODAL ──
+function openModal() {
+  document.getElementById('ai-modal').classList.add('open');
+}
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('ai-modal')) {
+    document.getElementById('ai-modal').classList.remove('open');
+  }
+}
+function setPrompt(text) {
+  document.getElementById('modal-textarea').value = text;
+  document.getElementById('modal-textarea').focus();
+}
+function generatePolicy() {
+  document.getElementById('ai-modal').classList.remove('open');
+  document.getElementById('modal-textarea').value = '';
+  document.getElementById('ai-alert').style.display = 'flex';
+  setTimeout(() => {
+    document.getElementById('ai-alert').style.display = 'none';
+  }, 8000);
+}
+function dismissAiAlert() {
+  document.getElementById('ai-alert').style.display = 'none';
+}
+
+// ── INIT ──
+renderModuleContent();
+</script>
+</body>
+</html>
